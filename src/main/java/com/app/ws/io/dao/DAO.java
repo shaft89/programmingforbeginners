@@ -5,6 +5,7 @@
  */
 package com.app.ws.io.dao;
 
+import com.app.ws.shared.dto.DeviceDTO;
 import com.app.ws.shared.dto.UserDTO;
 
 /**
@@ -19,6 +20,8 @@ public interface DAO {
     void updateUser(UserDTO userProfile);
     void closeConnection();
     
+    DeviceDTO getDevice(long id);
+    DeviceDTO saveDevice(DeviceDTO device); 
     
     
 }

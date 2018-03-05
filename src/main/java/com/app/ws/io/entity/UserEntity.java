@@ -21,7 +21,7 @@ public class UserEntity implements Serializable{
     @Id
     @GeneratedValue
     private long id;
-    private String playerID;
+    private String playerID; //SBO: Was ist der Unterschied zwischen id, playerId und userId?
     private String userId;
     private String name;
     private String email;

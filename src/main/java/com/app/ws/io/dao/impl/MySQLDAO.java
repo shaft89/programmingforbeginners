@@ -6,7 +6,9 @@
 package com.app.ws.io.dao.impl;
 
 import com.app.ws.io.dao.DAO;
+import com.app.ws.io.entity.DeviceEntity;
 import com.app.ws.io.entity.UserEntity;
+import com.app.ws.shared.dto.DeviceDTO;
 import com.app.ws.shared.dto.UserDTO;
 import com.app.ws.utils.HibernateUtils;
 import java.util.List;
@@ -75,6 +77,42 @@ public class MySQLDAO implements DAO{
         return userDto;       
     }
     
+    public DeviceDTO getDevice(long id){ //Verstehe ich nicht wirklich was ich da gebaut habe...
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+
+        //Create Criteria against a particular persistent class
+        CriteriaQuery<DeviceEntity> criteria = cb.createQuery(DeviceEntity.class);
+
+        //Query roots always reference entity
+        Root<DeviceEntity> profileRoot = criteria.from(DeviceEntity.class);
+        criteria.select(profileRoot);
+        criteria.where(cb.equal(profileRoot.get("id"), id));
+
+        // Fetch single result
+        DeviceEntity deviceEntity = session.createQuery(criteria).getSingleResult();
+
+        DeviceDTO deviceDto = new DeviceDTO();
+        BeanUtils.copyProperties(deviceEntity, deviceDto);
+
+        return deviceDto;
+
+    }
+  
+    public DeviceDTO saveDevice (DeviceDTO device){
+        
+        DeviceEntity deviceEntity = new DeviceEntity();
+        BeanUtils.copyProperties(device, deviceEntity);
+        
+        session.beginTransaction();
+        session.save(deviceEntity);
+        session.getTransaction().commit();
+        
+        DeviceDTO returnValue = new DeviceDTO();
+        BeanUtils.copyProperties(deviceEntity, returnValue);
+        
+        return returnValue;
+    }
+    
     public UserDTO saveUser(UserDTO user){
         
         UserDTO returnValue = null;
@@ -89,7 +127,6 @@ public class MySQLDAO implements DAO{
         BeanUtils.copyProperties(userEntity, returnValue);
         
         return returnValue;
-    
     
     }
 
@@ -108,7 +145,5 @@ public class MySQLDAO implements DAO{
         session.getTransaction().commit();
     
     }
-
-    
     
 }
